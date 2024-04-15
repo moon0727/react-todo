@@ -1,20 +1,27 @@
 import { useState, useRef } from "react";
-import "./TodoEditor.css";
+import style from "./TodoEditor.module.css";
 
 const TodoEditor = ({ onCreate }) => {
+  const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const inputRef = useRef();
+
+  const onChangeTitle = (e) => {
+    setTitle(e.target.value);
+  };
 
   const onChangeContent = (e) => {
     setContent(e.target.value);
   };
 
   const onSubmit = () => {
-    if (!content) {
+    if (!title) {
       inputRef.current.focus();
+      setContent("");
       return;
     }
-    onCreate(content);
+    onCreate(title, content);
+    setTitle("");
     setContent("");
   };
 
@@ -25,20 +32,34 @@ const TodoEditor = ({ onCreate }) => {
   };
 
   return (
-    <div className="TodoEditor">
-      <h4>새로운 Todo 작성하기 ✒️</h4>
-      <div className="editor_wrapper">
+    <div className={style.wrapper}>
+      <div className={style.editor_wrapper}>
+        <div>Title</div>
+        <input
+          ref={inputRef}
+          value={title}
+          onChange={onChangeTitle}
+          onKeyDown={onKeyDown}
+          placeholder="New Todo Title..."
+          className={style.title}
+        />
+        <div>Content</div>
         <input
           ref={inputRef}
           value={content}
           onChange={onChangeContent}
           onKeyDown={onKeyDown}
-          placeholder="새로운 Todo..."
+          placeholder="New Todo Content..."
+          className={style.content}
         />
-        <button onClick={onSubmit}>추가</button>
+        <button className={style.submitBtn} onClick={onSubmit}>
+          ✔️
+        </button>
       </div>
     </div>
   );
 };
 
 export default TodoEditor;
+
+// Add🖋️✏️✅

@@ -1,93 +1,46 @@
-// import { useState, useRef } from "react";
-// import "./App.css";
-// import Header from "./Component/Header";
-// import TodoEditor from "./Component/TodoEditor";
-// import TodoList from "./Component/TodoList";
-
-// const mockTodo = [
-//   {
-//     id: 0,
-//     isDone: false,
-//     content: "React study",
-//     createdDate: new Date().getTime(),
-//   },
-//   {
-//     id: 1,
-//     isDone: false,
-//     content: "JS study",
-//     createdDate: new Date().getTime(),
-//   },
-//   {
-//     id: 2,
-//     isDone: false,
-//     content: "playing piano",
-//     createdDate: new Date().getTime(),
-//   },
-// ];
-
-// function App() {
-//   const [todo, setTodo] = useState(mockTodo);
-//   const idRef = useRef(3);
-
-//   const onCreate = (content) => {
-//     const newItem = {
-//       id: idRef.current,
-//       content,
-//       isDone: false,
-//       createDate: new Date().getTime(),
-//     };
-//     setTodo([newItem, ...todo]);
-//     idRef.current += 1;
-//   };
-
-//   const onUpdate = (targetId) => {
-//     setTodo(
-//       todo.map((it) =>
-//         it.id === targetId ? { ...it, isDone: !it.isDone } : it
-//       )
-//     );
-//   };
-
-//   const onDelete = (targetId) => {
-//     setTodo(todo.filter((it) => it.id !== targetId));
-//   };
-
-//   return (
-//     <div className="App">
-//       <Header />
-//       <TodoEditor onCreate={onCreate} />
-//       <TodoList todo={todo} onUpdate={onUpdate} onDelete={onDelete} />
-//     </div>
-//   );
-// }
-
-// export default App;
-
-import { useReducer, useRef } from "react";
-import "./App.css";
+import { useReducer, useRef, useState, useEffect } from "react";
 import Header from "./Component/Header";
 import TodoEditor from "./Component/TodoEditor";
 import TodoList from "./Component/TodoList";
+import TodoCalendar from "./Component/TodoCalendar";
 import TodoView from "./Component/TodoView";
+import style from "./App.module.css";
+
+const setDate = (date) => {
+  const year = date.getFullYear().toString();
+  const month =
+    (date.getMonth() + 1).toString().length === 1
+      ? 0 + (date.getMonth() + 1).toString()
+      : (date.getMonth() + 1).toString();
+  const day =
+    date.getDate().toString().length === 1
+      ? 0 + date.getDate().toString()
+      : date.getDate().toString();
+
+  return year + "." + month + "." + day;
+};
 
 const mockTodo = [
   {
     id: 0,
     isDone: false,
-    content: "새로운 Todo를 추가해보세요",
-    createdDate: new Date().getTime(),
+    title: "Todo 작성하기",
+    content: "타이틀은 필수로 작성해야합니다.",
+    createdDate: setDate(new Date()),
   },
   {
     id: 1,
     isDone: false,
-    content: "체크 박스로 완료된 일을 표시해보세요",
-    createdDate: new Date().getTime(),
+    title: "완료한 일정",
+    content: "check box를 눌러 완료한 일정을 체크하세요.",
+    createdDate: setDate(new Date()),
   },
   {
     id: 2,
     isDone: false,
-    content: "삭제 버튼으로 일정을 삭제해보세요",
-    createdDate: new Date().getTime(),
+    title: "잘못 작성한 일정 삭제",
+    content: "삭제 버튼으로 일정을 지워보세요.",
+    createdDate: setDate(new Date()),
   },
 ];
 
@@ -104,9 +57,6 @@ function reducer(state, action) {
     case "DELETE": {
       return state.filter((it) => it.id !== action.targetId);
     }
-    case "MODIFY": {
-      return console.log(state);
-    }
     default:
       return state;
   }
@@ -114,16 +64,19 @@ function reducer(state, action) {
 
 function App() {
   const [todo, dispatch] = useReducer(reducer, mockTodo);
+  const [day, setDay] = useState(setDate(new Date()));
+  const [showTodo, setshowTodo] = useState(todo);
   const idRef = useRef(3);
 
-  const onCreate = (content) => {
+  const onCreate = (title, content) => {
     dispatch({
       type: "CREATE",
       newItem: {
         id: idRef.current,
+        title,
         content,
         isDone: false,
-        createdDate: new Date().getTime(),
+        createdDate: day,
       },
     });
     idRef.current += 1;
@@ -143,27 +96,33 @@ function App() {
     });
   };
 
-  // const onModify = (targetId) => {
-  //   dispatch({
-  //     type: "MODIFY",
-  //     targetId,
-  //   });
-  // };
+  const handleDayChange = (date) => {
+    setDay(setDate(date));
+  };
+
+  useEffect(() => {
+    setshowTodo(todo.filter((it) => it.createdDate.includes(day)));
+  }, [day, todo]);
 
   return (
-    <div className="App">
-      <div className="part1">
-        <Header />
-        <TodoEditor onCreate={onCreate} />
-        <TodoView todo={todo} />
-      </div>
-      <div className="part2">
-        <TodoList
-          todo={todo}
-          onUpdate={onUpdate}
-          onDelete={onDelete}
-          // onModify={onModify}
-        />
+    <div className={style.body}>
+      <Header />
+      <div className={style.main}>
+        <div className={style.part1}>
+          <h4 className={style.text}>New ToDo</h4>
+          <TodoEditor onCreate={onCreate} />
+          <TodoCalendar setDate={setDate} onDayChange={handleDayChange} />
+        </div>
+        <div className={style.part2}>
+          <TodoView todo={showTodo} />
+          <TodoList
+            todo={showTodo}
+            onUpdate={onUpdate}
+            onDelete={onDelete}
+
+            // onModify={onModify}
+          />
+        </div>
       </div>
     </div>
   );

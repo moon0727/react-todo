@@ -1,0 +1,37 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+  width: 1200px;
+  padding: 30px;
+  background-color: #8294c4;
+  border-radius: 10px;
+  gap: 30px;
+}
+
+.part1 {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.part2 {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.text {
+  margin: 0;
+  padding: 10px;
+  margin-right: auto;
+  border-radius: 10px;
+  background-color: #eceff8;
+}

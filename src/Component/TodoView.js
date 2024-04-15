@@ -1,4 +1,4 @@
-import "./TodoView.css";
+import style from "./TodoView.module.css";
 
 const TodoView = ({ todo }) => {
   const analyzeTodo = () => {
@@ -16,13 +16,10 @@ const TodoView = ({ todo }) => {
   const { totalCount, doneCount, notDoneCount } = analyzeTodo();
 
   return (
-    <div className="TodoView">
-      <h4>Todo View ❄️</h4>
-      <div className="viewbox">
-        <div>☀️ Total : {totalCount}</div>
-        <div>🌕 Done : {doneCount}</div>
-        <div>🌑 Not Done : {notDoneCount}</div>
-      </div>
+    <div className={style.wrapper}>
+      <div>☀️ Total : {totalCount}</div>
+      <div>🌕 Done : {doneCount}</div>
+      <div>🌑 Not Done : {notDoneCount}</div>
     </div>
   );
 };

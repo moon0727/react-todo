@@ -1,10 +1,11 @@
-import "./TodoItem.css";
+import style from "./TodoItem.module.css";
 
 const TodoItem = ({
   id,
+  title,
   content,
   isDone,
-  createDate,
+  createdDate,
   onUpdate,
   onDelete,
   //   onModify,
@@ -23,16 +24,29 @@ const TodoItem = ({
   //   };
 
   return (
-    <div className="TodoItem">
-      <div className="checkbox_col">
+    <div className={style.wrapper}>
+      <div className={style.checkbox}>
         <input onChange={onChangeCheckbox} checked={isDone} type="checkbox" />
       </div>
-      <div className={`title_col_${isDone ? "done" : ""}`}>{content}</div>
-      <div className="date_col">{new Date().toLocaleDateString()}</div>
-      <div className="btn_col">
-        <button>수정</button>
+      {isDone ? (
+        <div className={style.todo_done}>
+          <div className={style.title}>{title}</div>
+          <div className={style.content}>{content}</div>
+        </div>
+      ) : (
+        <div className={style.todo}>
+          <div className={style.title}>{title}</div>
+          <div className={style.content}>{content}</div>
+        </div>
+      )}
+
+      <div className={style.date}>{createdDate}</div>
+      <div>
+        <button className={style.modifybtn}>🔧</button>
         {/* <button onClick={onClickModify}>수정</button> */}
-        <button onClick={onClickDelete}>삭제</button>
+        <button className={style.deletebtn} onClick={onClickDelete}>
+          🗑️
+        </button>
       </div>
     </div>
   );
