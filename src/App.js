@@ -57,6 +57,13 @@ function reducer(state, action) {
     case "DELETE": {
       return state.filter((it) => it.id !== action.targetId);
     }
+    case "MODIFY": {
+      return state.map((it) =>
+        it.id === action.targetId
+          ? { ...it, title: action.newTitle, content: action.newContent }
+          : it
+      );
+    }
     default:
       return state;
   }
@@ -96,6 +103,15 @@ function App() {
     });
   };
 
+  const onModify = (targetId, newTitle, newContent) => {
+    dispatch({
+      type: "MODIFY",
+      targetId,
+      newTitle,
+      newContent,
+    });
+  };
+
   const handleDayChange = (date) => {
     setDay(setDate(date));
   };
@@ -105,7 +121,7 @@ function App() {
   }, [day, todo]);
 
   return (
-    <div className={style.body}>
+    <div className={style.container}>
       <Header />
       <div className={style.main}>
         <div className={style.part1}>
@@ -119,8 +135,7 @@ function App() {
             todo={showTodo}
             onUpdate={onUpdate}
             onDelete={onDelete}
-
-            // onModify={onModify}
+            onModify={onModify}
           />
         </div>
       </div>

@@ -5,7 +5,6 @@ const TodoList = ({ todo, onUpdate, onDelete, onModify }) => {
   return (
     <div className={style.wrapper}>
       <div className={style.TodoList_wrapper}>
-        <h4>Todo List ⭐</h4>
         <div className={style.list}>
           {todo.map((it) => (
             <TodoItem
@@ -13,7 +12,7 @@ const TodoList = ({ todo, onUpdate, onDelete, onModify }) => {
               {...it}
               onUpdate={onUpdate}
               onDelete={onDelete}
-              // onModify={onModify}
+              onModify={onModify}
             />
           ))}
         </div>

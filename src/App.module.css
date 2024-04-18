@@ -1,13 +1,12 @@
-.body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.container {
+  width: 1200px;
+  margin: 0px auto;
 }
 
 .main {
   display: flex;
   flex-direction: row;
-  width: 1200px;
+
   padding: 30px;
   background-color: #8294c4;
   border-radius: 10px;

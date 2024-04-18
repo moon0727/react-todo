@@ -13,21 +13,25 @@
 }
 
 .todo {
-  width: 420px;
+  width: 380px;
+  display: flex;
+  flex-direction: column;
 }
 
 .todo_done {
-  width: 420px;
+  width: 380px;
   text-decoration: line-through;
   font-style: italic;
   color: gray;
 }
 
-.title {
+.title,
+.changeTitle {
   margin-bottom: 10px;
 }
 
-.content {
+.content,
+.changeContent {
   color: gray;
   font-size: 13px;
 }
@@ -56,4 +60,20 @@
 .modifybtn:active,
 .deletebtn:active {
   background-color: #8294c4;
+}
+
+.changeTitle,
+.changeContent {
+  border: none;
+  border-bottom: 1px solid #8294c4;
+  background-color: #eceff8;
+}
+
+.changeTitle {
+  font-size: 16px;
+}
+
+.changeTitle:focus,
+.changeContent:focus {
+  outline: none;
 }
