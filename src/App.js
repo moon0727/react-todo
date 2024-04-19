@@ -72,8 +72,9 @@ function reducer(state, action) {
 function App() {
   const [todo, dispatch] = useReducer(reducer, mockTodo);
   const [day, setDay] = useState(setDate(new Date()));
-  const [showTodo, setshowTodo] = useState(todo);
+  const [showTodo, setShowTodo] = useState(todo);
   const idRef = useRef(3);
+  const [state, setState] = useState("total");
 
   const onCreate = (title, content) => {
     dispatch({
@@ -117,8 +118,18 @@ function App() {
   };
 
   useEffect(() => {
-    setshowTodo(todo.filter((it) => it.createdDate.includes(day)));
-  }, [day, todo]);
+    if (state === "total") {
+      setShowTodo(todo.filter((it) => it.createdDate.includes(day)));
+    } else if (state === "done") {
+      setShowTodo(
+        todo.filter((it) => it.createdDate.includes(day) && it.isDone === true)
+      );
+    } else {
+      setShowTodo(
+        todo.filter((it) => it.createdDate.includes(day) && it.isDone === false)
+      );
+    }
+  }, [day, state, todo]);
 
   return (
     <div className={style.container}>
@@ -127,10 +138,18 @@ function App() {
         <div className={style.part1}>
           <h4 className={style.text}>New ToDo</h4>
           <TodoEditor onCreate={onCreate} />
-          <TodoCalendar setDate={setDate} onDayChange={handleDayChange} />
+          <TodoCalendar
+            setDate={setDate}
+            onDayChange={handleDayChange}
+            todo={todo}
+          />
         </div>
         <div className={style.part2}>
-          <TodoView todo={showTodo} />
+          <TodoView
+            todo={todo.filter((it) => it.createdDate.includes(day))}
+            setState={setState}
+            state={state}
+          />
           <TodoList
             todo={showTodo}
             onUpdate={onUpdate}
